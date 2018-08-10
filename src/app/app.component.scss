@@ -1,0 +1,59 @@
+:host {
+  .search-form {
+    width: 100%;
+    text-align: right;
+
+    form {
+      padding: 24px;
+      & > mat-form-field {
+        width: 320px !important;
+      }
+    }
+  }
+
+  .search-result {
+    .user-profile {
+      padding: 8px 16px;
+      display: inline-flex;
+
+      .user-avatar {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        margin: 18px 12px 2px 0;
+      }
+    }
+
+    mat-list {
+      .inner-scroll {
+        overflow-y: scroll;
+        height: 540px;
+      }
+
+      .load-more {
+        position: absolute;
+        right: 12px;
+      }
+
+      mat-list-item {
+        .follower-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+        }
+
+        p {
+          opacity: .7;
+        }
+
+      }
+    }
+
+  }
+
+  .mat-progress-bar {
+    position: absolute;
+    top: 64px;
+    height: 2px;
+  }
+}

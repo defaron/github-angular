@@ -1,0 +1,40 @@
+# .circleci/config.yml
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:8
+        environment:
+          JOBS: 2
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - npm-deps-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - npm-deps-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: npm-deps-{{ checksum "package.json" }}
+
+      # - run:
+      #     name: Testing
+      #     command: npm run lint && npm run ng -- test --watch=false --progress=false && npm run ng -- e2e
+
+      - run:
+          name: Building production
+          command: npm run ng -- build --prod
+
+      - deploy:
+          name: Deploy Master to Heroku
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+            fi

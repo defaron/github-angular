@@ -1,0 +1,49 @@
+<mat-toolbar color="primary">
+  <span>{{title}}</span>
+</mat-toolbar>
+
+<div class="search-form">
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field>
+      <input matInput formControlName="searchText" placeholder="Search">
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" color="primary" [disabled]="!searchForm.valid">Submit</button>
+  </form>
+</div>
+
+<div class="search-result" *ngIf="currentUser | async as user;else loading">
+  <div class="user-profile">
+    <img class="user-avatar" [src]="user.avatar_url">
+    <div class="user-detail">
+      <h4>{{user.name}}</h4>
+      <p>{{user.bio || user.html_url}}</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+  <mat-list>
+    <h3 mat-subheader>
+      Followers({{user.followers}}/{{followers.length || 0}})
+
+      <button mat-button class="load-more" color="primary" *ngIf="user.followers > followers.length"
+        (click)="loadMore(user.login)">Load More</button>
+    </h3>
+    <div class="inner-scroll">
+      <mat-list-item *ngFor="let follower of followers">
+        <img [src]="follower.avatar_url" class="follower-avatar" mat-list-icon>
+        <h4 mat-line>{{follower.login}}</h4>
+        <p mat-line> {{follower.html_url}} </p>
+      </mat-list-item>
+    </div>
+    <mat-divider></mat-divider>
+  </mat-list>
+
+</div>
+
+<ng-template #loading>
+  <span *ngIf="submitted">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </span>
+</ng-template>
